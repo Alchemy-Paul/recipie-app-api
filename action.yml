@@ -1,0 +1,33 @@
+name: slack_notice
+description: This GitHub Action is Slack notice to reviewer when pull request review requested.
+author: mida-hub
+branding:
+  icon: 'at-sign'
+  color: 'blue'
+
+inputs:
+  configuration_path:
+    description: 'A path for the mapping reviewer to slack configuration'
+    default: '.github/workflows/slack_notice/reviewer_to_slack.json'
+  github_token: 
+    description: 'operation token'
+    default: ${{ github.token }}
+  github_repository:
+    description: 'operation repository'
+    default: ${{ github.repository }}
+  github_event_pull_request_number:
+    description: 'operation pull request number'
+    default: ${{ github.event.pull_request.number }}
+  slack_webhook_url:
+    description: 'slack webhook token'
+    required: true
+  
+runs:
+  using: 'docker'
+  image: 'docker://mida12251141/reviewer-slack-notice:v1.0.1'
+  args:
+    - ${{ inputs.configuration_path }}
+    - ${{ inputs.github_token }}
+    - ${{ inputs.github_repository }}
+    - ${{ inputs.github_event_pull_request_number }}
+    - ${{ inputs.slack_webhook_url }}
